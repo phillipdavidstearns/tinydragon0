@@ -4,7 +4,7 @@ After=network.target rc.local.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/xinit -fullscreen -j +mb -fa monaco -fs 8 -fg white -bg black -e /bin/sh -c '/usr/bin/python3 /home/tinydragon/tinydragon0/tinydragon0.py -i wlan0mon -p' -- -nocursor -s 0 dpms
+ExecStart=/usr/bin/xinit -fullscreen -j +mb -fa monaco -fs 8 -fg white -bg black -e /bin/sh -c '/usr/bin/python3 /home/tinydragon/tinydragon0/tinydragon0.py -i wlan0mon -a -p' -- -nocursor -s 0 dpms
 Restart=on-success
 RestartPreventExitStatus=SIGTERM SIGKILL
 RestartSec=5

@@ -105,6 +105,12 @@ Supported interface modes:
 1. `sudo apt-get --fix-broken install`
 1. `sudo apt-get update && sudo apt-get update -y && sudo apt-get install xinit`
 
+#### Setting up the Adafruit Audio Bonnet
+
+Note: I setup the audio bonnet first, then the display. The display installation scripts overwrite /boot/cmdline.txt and /boot/config.txt files. This kinds messes up the audio bonnet setup, requiring manual modification of files (documented in their installation instructions). It's possible that Adafruit's installation script will overwrite files necessary for the Kuman display to work.
+
+Some work has to be done to either figure out the ideal setup order to use the installation scripts in a way that they don't interfere or to manually customize the installations for both. At present, it seems that to ansible-ize this for bootstrap and setup on unconfigured devices, installation scripts could be run in any order and the final version of files in /boot/ from a completely setup pi could be copied onto the device as a final step.
+
 #### Enabling Gadget mode (Ethernet over USB)
 
 1. `cd /boot`

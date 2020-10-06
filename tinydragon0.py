@@ -71,10 +71,10 @@ SOCKET_BLOCKING = args.socket_blocking
 CHUNK = args.chunk_size
 RATE = args.sample_rate
 WIDTH = args.width
-if args.timeout > 0.0:
-	TIMEOUT = args.timeout
-else:
-	TIMEOUT = 1 / CHUNK
+# if args.timeout > 0.0:
+TIMEOUT = args.timeout
+# else:
+# 	TIMEOUT = 1 / CHUNK
 PRINT = args.print_packet
 
 print("AUDIO_BLOCKING: " + str(AUDIO_BLOCKING))
@@ -123,25 +123,38 @@ def init_pyaudio_stream(PyAudio=PA, width=WIDTH, channels=CHANNELS, rate=RATE, f
 				    stream_callback=audify_data_callback)
 
 def audify_data_callback(in_data, frame_count, time_info, status):
-	return(bytes(extract_frames(packets, frame_count)), pyaudio.paContinue)
+	data = bytes(extract_frames(packets, frame_count))
+	return(data, pyaudio.paContinue)
 
 def audify_data(buffers, pa_stream):
-	pa_stream.write(bytes(extract_frames(buffers, pa_stream.get_write_available())))
+	frames = pa_stream.get_write_available()
+	data = bytes(extract_frames(packets, frames))
+	pa_stream.write(data)
 
 # does what it says on the tin
 def extract_frames(buffers, frames):
+
 	chunk = bytearray()
-	# assemble frames into chunk
+	
+	# assemble frames into chunk (interleaved samples)
 	for i in range(frames):
 		for n in range(CHANNELS):
 			try:
 				frame = buffers[n][i]
-				if PRINT: print(chr(frame),end='')
 			except:
 				frame = 127
 			chunk.append(frame)
+
+	# print the extracted chunk
+	if PRINT:
+		for n in range(CHANNELS):
+			for c in buffers[n][0:frames]:
+				print(chr(c),end='')
+
+	# remove extracted frames from buffers
 	for n in range(CHANNELS):
 		buffers[n] = buffers[n][frames:]
+	
 	return chunk
 
 def read_sockets(buffers):
@@ -151,6 +164,7 @@ def read_sockets(buffers):
 			try:
 				data, interface = socket.recvfrom(65536)
 				if data:
+					n = 0
 					for n in range(CHANNELS):
 						if interface[0]==interfaces[n]:
 							buffers[n] += data
@@ -158,13 +172,12 @@ def read_sockets(buffers):
 				pass
 	else:
 		for n in range(len(sockets)):
-			if len(buffers[n]) < 65536:
-				try:
-					data = sockets[n].recv(65536)
-					if data:
-						buffers[n] += data
-				except:
-					pass
+			try:
+				data = sockets[n].recv(65536)
+				if data:
+					buffers[n] += data
+			except:
+				pass
 
 def shutdown(PyAudio, socket_list):
 	# bring down the pyaudio stream
@@ -218,7 +231,7 @@ def main():
 
 	while True:
 		#give the processor a rest
-		time.sleep(1/CHUNK)
+		# time.sleep(1/CHUNK)
 		read_sockets(packets)
 		if AUDIO_BLOCKING: audify_data(packets, stream)
 
