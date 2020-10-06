@@ -1,0 +1,13 @@
+[Unit]
+Description=random wifi channel scaner for tinydragon0.service
+After=network.target rc.local.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/tinydragon/tinydragon0/tdscan.sh
+Restart=on-success
+RestartPreventExitStatus=SIGTERM SIGKILL
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target tinydragon0.service

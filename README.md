@@ -53,8 +53,6 @@ key_mgmt=WPA-PSK
 }
 ```
 
-1. edit `config.txt` to enable gadget mode overlay by adding a new line: `dtoverlay=dwc2`
-1. edit `cmdline.txt` to include `modules-load=dwc2,g_ether` after `rootwait`
 1. Unmount card, insert into Pi Zero, power up and connect to your host machine via USB.
 1. ping `raspberrypi.local`
 1. if successful, login: `ssh pi@raspberrypi.local`
@@ -75,7 +73,6 @@ key_mgmt=WPA-PSK
 1. reboot: `sudo reboot -h now`
 1. login in using `ssh tinydragon@tinydragon0.local`
 1. remove to user `pi`: `sudo userdel -r pi`
-
 1. permanently boot to console: `sudo systemctl set-default multi-user.target`, `graphical.target` for GUI
 1. `sudo apt-get update && sudo apt-get upgrade -y`
 1. `wget -O re4son-kernel_current.tar.xz https://re4son-kernel.com/download/re4son-kernel-current/ && tar -xJf re4son-kernel_current.tar.xz`
@@ -96,15 +93,39 @@ Supported interface modes:
 ...
 ``` 
 
-1. `sudo apt-get update && sudo apt-get install git tcpdump aircrack-ng -y`
+1. `sudo apt-get update && sudo apt-get install git tcpdump aircrack-ng python3-pyaudio -y`
+
+#### Kuman MHS35 Display
+
+1. `git clone https://github.com/goodtft/LCD-show.git`
+1. `chmod -R 755 LCD-show`
+1. `cd LCD-show/`
+1. `sudo ./MHS35-show`
+1. wait for the pi to reboot
+1. `sudo apt-get --fix-broken install`
+1. `sudo apt-get update && sudo apt-get update -y && sudo apt-get install xinit`
+
+#### Enabling Gadget mode (Ethernet over USB)
+
+1. `cd /boot`
+1. edit `config.txt` to enable gadget mode overlay by adding a new line: `dtoverlay=dwc2` above `[pi4]`.
+1. edit `cmdline.txt` to include `modules-load=dwc2,g_ether` after `rootwait`
+
+#### Disabling WiFi
+
+Temporarily:
+
+1. `sudo systemctl stop wpa_supplicant`
+1. `airmon-ng start wlan0`
+
+Permanently:
+
 1. `sudo systemctl disable wpa_supplicant`
-1. add `airmon-ng start wlan0` to `/etc/rc.local`
-1. `reboot`
-1. From host machine, ssh possible over USB, `wlan0` is set to monitor mode on boot.
+1. add `airmon-ng start wlan0` to `/etc/rc.local` before `exit 0`
 
 #### Restoring WiFi Internet Connection
 
-Assumes you've already configured to connect to a WiFi network by editing `wpa_supplicant.conf`.
+Temporarily:
 
 1. Bring down the monitor interface: `sudo airmon-ng stop wlan0mon`
 1. Restart WiFi networking services: `sudo systemctl restart wpa_supplicant.service networking.service`
@@ -113,45 +134,19 @@ Assumes you've already configured to connect to a WiFi network by editing `wpa_s
 1. Test internet connection: `ping google.com -c 3`
 1. Do your downloading. On reboot, everything will be returned to "normal".
 
-#### Kuman MHS35 Display
+Permanently:
 
-1. `git clone https://github.com/goodtft/LCD-show.git`
-1. `chmod -R 755 LCD-show`
-1. `cd LCD-show/`
-1. `sudo ./MHS35-show`
-1. `sudo apt-get --fix-broken install`
+1. Same as above, but enable WiFi wpa_supplicant.service: `sudo systemctl enable wpa_supplicant.service`
 
 #### TinyDragon0 Software
 
-1. `sudo apt-get update && sudo apt-get update -y && sudo apt-get install xinit`
-1. `sudo xinit +hm -fullscreen +j -k8 +mb -fa monaco -fs 8 -fg white -bg black -e /bin/sh -c 'ls -R /' -- -nocursor
-`
+1. Clone the repo: `git clone https://github.com/phillipdavidstearns/tinydragon0.git`
+1. `cd tinydragon0`
+1. `sudo cp tinydragon0.service /lib/systemd/system/`
+1. `sudo systemctl enable tinydragon0.service`
+1. `sudo systemctl start tinydragon0.service`  
 
-Requirements:
-
-* python3
-* pyaudio
-
-Install pyaudio on Debian systems using:
-
-```
-$ sudo apt-get update && sudo apt-get install python3-pyaudio portaudio19-dev
-$ git clone https://github.com/phillipdavidstearns/packet2audio.git
-```
-
-Create a symlink for handy command line usage:
-
-```
-$ sudo ln -s /path/to/packet2audio/packet2audio.py /usr/local/bin/packet2audio
-```
-
-Run with:
-
-```
-$ packet2audio -i <iface_name>
-```
-
-## Usage
+## `tinydragon0.py` Usage
 
 Simple, but it must be run as root (with `sudo`):
 
