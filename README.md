@@ -1,11 +1,44 @@
 # TinyDragon0
 
+*by Phillip David Stearns 2020*
 
 A box that captures broadcast wifi traffic, prints it to an onboard screen and converts the raw packet data to sound.
 
 It's a very scaled down and simplified version of the installation [Here Be Dragons](), that translated cyber attacks on honeypot servers setup around the globe into sound.
 
 This box is a way for us humans to sense the invisible wireless signals that make up our local networked digital ecosystem by bringing it into our field of perception. It's meant to be experienced much like the roar of the ocean, as something to become familiar with, a texture that is at first incomprehensible, but after some time, we can begin to intuit meaning and significance from its ebbs and flows.
+
+## Prototype
+
+![](documentation/000.jpg)
+
+![](documentation/001.jpg)
+
+![](documentation/002.jpg)
+
+### Notes:
+
+The electronics are to be installed within a ready-made bookshelf speaker. Currently looking at $100 for all parts. Eyeing a target retail price of 250 each. Edition of 50.
+
+I'm currently prototyping and have the basic functions/features working:
+
+* Raspberry Pi can sniff wifi traffic
+* Traffic can be displayed as text on a 3.5" LCD screen
+* Traffic is audible via 3W amplifier
+* Whole system starts up automatically when power is applied
+
+Features to be implemented::
+
+* Knob for controlling volume (possibly doubles as push on/off for the whole box
+* Knob for manually "tuning" the WiFi channel being sniffed. Push button switches between tuning and scanning modes
+* RGB LED on underside for additional visual representation.
+* Push button knob for on/off, color mode selection.
+
+Questions I'm asking myself:
+
+* Do I really need a graphical display? Would having an HDMI port be enough, so that folks could plug into their own monitors?
+	* This would drastically reduce the amount of fabrication work to modify the existing speaker housing.
+* Do I really need LEDs? Sure it makes the whole thing sparkle more but maybe it's better to go for the minimalist approach.
 
 ## Installation
 * [Installing Kali Linux on a Pi Zero W](https://dantheiotman.com/2017/10/06/installing-kali-linux-on-a-pi-zero-w/)
@@ -23,14 +56,6 @@ This box is a way for us humans to sense the invisible wireless signals that mak
 * 1/8" sereo jack with switch
 * 2.5" 4ohm 3W speaker
 * Adafruit Audio Bonnet
-
-#### Setup: Adafruit Audio Bonnet
-
-1. Solder terminals to bonnet
-1. Solder wires to speaker
-1. Solder wires to left and right non-switched side of 1/8" jack
-1. Solder speaker wires to left channel on switched side of 1/8" jack
-1. Secure left and right jack wires into respective terminal blocks on bonnet
 
 #### Setup Raspberry Pi Zero:
 
@@ -69,7 +94,6 @@ key_mgmt=WPA-PSK
 1. Set password for `tinydragon`: `sudo passwd tinydragon`
 1. Run `sudo nano /etc/hostname` and replace `raspberrypi` with `tinydragon0`
 1. Run `sudo nano /etc/hosts` and replace `raspberrypi` with `tinydragon0`
-
 1. reboot: `sudo reboot -h now`
 1. login in using `ssh tinydragon@tinydragon0.local`
 1. remove to user `pi`: `sudo userdel -r pi`
@@ -106,6 +130,12 @@ Supported interface modes:
 1. `sudo apt-get update && sudo apt-get update -y && sudo apt-get install xinit`
 
 #### Setting up the Adafruit Audio Bonnet
+
+1. Solder terminals to bonnet
+1. Solder wires to speaker
+1. Solder wires to left and right non-switched side of 1/8" jack
+1. Solder speaker wires to left channel on switched side of 1/8" jack
+1. Secure left and right jack wires into respective terminal blocks on bonnet
 
 Note: I setup the audio bonnet first, then the display. The display installation scripts overwrite /boot/cmdline.txt and /boot/config.txt files. This kinds messes up the audio bonnet setup, requiring manual modification of files (documented in their installation instructions). It's possible that Adafruit's installation script will overwrite files necessary for the Kuman display to work.
 
@@ -157,7 +187,7 @@ Permanently:
 Simple, but it must be run as root (with `sudo`):
 
 ```
-usage: packet2audio [-h] [-a] [-s] -i INTERFACE [-c CHUNK_SIZE]
+usage: tinydragon0 [-h] [-a] [-s] -i INTERFACE [-c CHUNK_SIZE]
                     [-r SAMPLE_RATE] [-w WIDTH] [-t TIMEOUT] [-p]
 
 optional arguments:
@@ -183,30 +213,28 @@ optional arguments:
 Listen to WiFi traffic: 
 
 ```
-sudo packet2audio -i wlan0
+sudo tinydragon0 -i wlan0
 ```
 
 Listen on more than one interface: 
 
 ```
-sudo packet2audio -i wlan0,eth0
+sudo tinydragon0 -i wlan0,eth0
 ```
 
-Enable blocking with `-a` for audio and `-s` for socket:
+Enable blocking with `-a` for audio and `-s` for socket (recommended to use audio blocking and socket non-blocking):
 
 ```
-sudo packet2audio -i wlan0,eth0 -a -s
+sudo tinydragon0 -i wlan0,eth0 -a -s
 ```
 
 Print the data written to the audio buffer with `-p` (hint: doesn't make sense to use without a monitor):
 
 ```
-sudo packet2audio -i wlan0 -p
+sudo tinydragon0 -i wlan0 -p
 ```
 
 ## Credits
-
-by Phillip David Stearns 2019
 
 Code cobbled together from examples at:
 
