@@ -4,7 +4,7 @@
 
 A box that captures broadcast wifi traffic, prints it to an onboard screen and converts the raw packet data to sound.
 
-It's a very scaled down and simplified version of the installation [Here Be Dragons](), that translated cyber attacks on honeypot servers setup around the globe into sound.
+It's a very scaled down and simplified version of the installation [Here Be Dragons](https://phillipstearns.com/artwork#/here-be-dragons/), that translated cyber attacks on honeypot servers setup around the globe into sound.
 
 This box is a way for us humans to sense the invisible wireless signals that make up our local networked digital ecosystem by bringing it into our field of perception. It's meant to be experienced much like the roar of the ocean, as something to become familiar with, a texture that is at first incomprehensible, but after some time, we can begin to intuit meaning and significance from its ebbs and flows.
 
@@ -18,29 +18,24 @@ This box is a way for us humans to sense the invisible wireless signals that mak
 
 ### Notes:
 
+* [Project BOM](https://docs.google.com/spreadsheets/d/1Ew9h2tyMmVrVZR29q5cJ_7pIAUenJ0zchHGKwL7NTBA/edit?usp=sharing)
+
 The electronics are to be installed within a ready-made bookshelf speaker. Currently looking at $100 for all parts. Eyeing a target retail price of 250 each. Edition of 50.
 
-I'm currently prototyping and have the basic functions/features working:
+**Working in prototype:**
 
 * Raspberry Pi can sniff wifi traffic
 * Traffic can be displayed as text on a 3.5" LCD screen
 * Traffic is audible via 3W amplifier
 * Whole system starts up automatically when power is applied
 
-Features to be implemented::
+**To Do:**
 
 * Knob for controlling volume (possibly doubles as push on/off for the whole box
 * Knob for manually "tuning" the WiFi channel being sniffed. Push button switches between tuning and scanning modes
-* RGB LED on underside for additional visual representation.
-* Push button knob for on/off, color mode selection.
-
-Questions I'm asking myself:
-
-* Do I really need a graphical display? Would having an HDMI port be enough, so that folks could plug into their own monitors?
-	* This would drastically reduce the amount of fabrication work to modify the existing speaker housing.
-* Do I really need LEDs? Sure it makes the whole thing sparkle more but maybe it's better to go for the minimalist approach.
 
 ## Installation
+
 * [Installing Kali Linux on a Pi Zero W](https://dantheiotman.com/2017/10/06/installing-kali-linux-on-a-pi-zero-w/)
 * [Set Up Kali Linux on the New $10 Raspberry Pi Zero W ](https://null-byte.wonderhowto.com/how-to/set-up-kali-linux-new-10-raspberry-pi-zero-w-0176819/)
 * [Enable Monitor Mode & Packet Injection on the Raspberry Pi](https://null-byte.wonderhowto.com/how-to/enable-monitor-mode-packet-injection-raspberry-pi-0189378/)
