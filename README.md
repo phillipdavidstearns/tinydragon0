@@ -33,6 +33,11 @@ The electronics are to be installed within a ready-made bookshelf speaker. Curre
 
 * Knob for controlling volume (possibly doubles as push on/off for the whole box
 * Knob for manually "tuning" the WiFi channel being sniffed. Push button switches between tuning and scanning modes
+* Case mod for shelf speaker for seamless integration.
+	* Route top
+	* Plexi cover (optional?)
+	* port for power
+	* on off switch
 
 ## Installation
 
