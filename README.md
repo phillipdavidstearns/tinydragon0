@@ -20,7 +20,7 @@ This box is a way for us humans to sense the invisible wireless signals that mak
 
 * [Project BOM](https://docs.google.com/spreadsheets/d/1Ew9h2tyMmVrVZR29q5cJ_7pIAUenJ0zchHGKwL7NTBA/edit?usp=sharing)
 
-The electronics are to be installed within a ready-made bookshelf speaker. Currently looking at $100 for all parts. Eyeing a target retail price of 250 each. Edition of 50.
+The electronics are to be installed within a ready-made bookshelf speaker. Currently looking at ~\$125 for all parts. Eyeing a target retail price of 250 each. Edition of 50.
 
 **Working in prototype:**
 
